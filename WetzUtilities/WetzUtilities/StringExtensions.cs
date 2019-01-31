@@ -1,0 +1,303 @@
+﻿/*
+Copyright 2019 Peter Wetzel
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+using System;
+using System.Linq;
+using System.Text;
+
+namespace WetzUtilities
+{
+    public static class StringExtensions
+    {
+        public static bool IsEmpty(this string val)
+        {
+            return string.IsNullOrWhiteSpace(val);
+        }
+
+        public static bool IsNotEmpty(this string val)
+        {
+            return !string.IsNullOrWhiteSpace(val);
+        }
+
+        /// <summary>
+        /// Check if source is a substring or not. Actual order of characters is ignored (e.g. "abc" would be valid substring of "decba")
+        /// </summary>
+        public static bool IsUnorderedSubstring(this string source, string target)
+        {
+            if (source == null)
+            {
+                return target == null;
+            }
+            if (source.Equals(target))
+            {
+                return true;
+            }
+            int excepted = source.Except(target).Count();
+            int intercected = source.Intersect(target).Count();
+            return excepted == 0 && intercected == source.Length;
+        }
+
+        public static bool SafeEquals(this string source, string other, StringComparison comp = StringComparison.OrdinalIgnoreCase)
+        {
+            if (source == null)
+            {
+                return other == null;
+            }
+            return source.Equals(other, comp);
+        }
+
+        public static int SafeHashCode(this string source)
+        {
+            return source == null ? 0 : source.GetHashCode();
+        }
+
+        public static string Shave(this string source, int maxLength, string concat = "...")
+        {
+            if (string.IsNullOrEmpty(source) || source.Length <= maxLength)
+            {
+                return source;
+            }
+            return string.Concat(source.Substring(0, maxLength), concat);
+        }
+
+        /// <summary>
+        /// Parse prefix within phrase, re-ordering result so that it is comma separated with prefix trailing
+        /// Example "The Phrase", "The " => "Phrase, The"
+        /// </summary>
+        public static string ParsePrefix(this string phrase, string prefix, StringComparison comp = StringComparison.OrdinalIgnoreCase)
+        {
+            if (phrase.IsEmpty())
+            {
+                return null;
+            }
+            if (prefix.IsEmpty())
+            {
+                return phrase;
+            }
+            int i = phrase.IndexOf(prefix, comp);
+            if (i != 0)
+            {
+                return phrase;
+            }
+            return string.Format("{0}, {1}", phrase.Substring(i + prefix.Length).Trim(), phrase.Substring(0, i + prefix.Length).Trim());
+        }
+
+        /// <summary>
+        /// Helper method for parsing a date string into a nullable DateTime.
+        /// If invalid, empty, etc., result will be null.
+        /// </summary>
+        public static DateTime? TryParseDate(this string date)
+        {
+            if (date.IsEmpty())
+            {
+                return null;
+            }
+            return DateTime.TryParse(date, out DateTime dt) ? dt : (DateTime?)null;
+        }
+
+        /// <summary>
+        /// Helper method for parsing a date string into a nullable DateTimeOffset.
+        /// If invalid, empty, etc., result will be null.
+        /// </summary>
+        public static DateTimeOffset? TryParseDateOffset(this string date)
+        {
+            if (date.IsEmpty())
+            {
+                return null;
+            }
+            return DateTimeOffset.TryParse(date, out DateTimeOffset dt) ? dt : (DateTimeOffset?)null;
+        }
+
+        /// <summary>
+        /// Parses given string into a TimeSpan.
+        /// Empty strings result in new TimeSpan.
+        /// </summary>
+        public static TimeSpan ParseTimeSpan(this string source)
+        {
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                return new TimeSpan();
+            }
+            var split = source.Split(new char[] { ':' });
+            switch (split.Length)
+            {
+                case 3:
+                    return TimeSpan.ParseExact(source, @"h\:mm\:ss", null);
+                case 2:
+                    return TimeSpan.ParseExact(source, @"m\:ss", null);
+                default:
+                    return TimeSpan.ParseExact(source, @"ss", null);
+
+            }
+        }
+
+        /// <summary>
+        /// Case-insensitive override for contains
+        /// Source:
+        /// http://stackoverflow.com/a/444818/21865
+        /// (Creative Commons Attribution Share Alike)
+        /// </summary>
+        public static bool Contains(this string source, string target, StringComparison comp)
+        {
+            if (source == null || target == null)
+            {
+                return false;
+            }
+            return source.IndexOf(target, comp) >= 0;
+        }
+
+        /// <summary>
+        /// Produces optional, URL-friendly version of a title, "like-this-one". 
+        /// hand-tuned for speed, reflects performance refactoring contributed
+        /// by John Gietzen (user otac0n)
+        /// Source:
+        /// http://stackoverflow.com/a/25486/21865
+        /// (Creative Commons Attribution Share Alike)
+        /// </summary>
+        public static string URLFriendly(this string title)
+        {
+            if (title == null) return "";
+
+            const int maxlen = 80;
+            int len = title.Length;
+            bool prevdash = false;
+            var sb = new StringBuilder(len);
+            char c;
+
+            for (int i = 0; i < len; i++)
+            {
+                c = title[i];
+                if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
+                {
+                    sb.Append(c);
+                    prevdash = false;
+                }
+                else if (c >= 'A' && c <= 'Z')
+                {
+                    // tricky way to convert to lowercase
+                    sb.Append((char)(c | 32));
+                    prevdash = false;
+                }
+                else if (c == ' ' || c == ',' || c == '.' || c == '/' ||
+                         c == '\\' || c == '-' || c == '_' || c == '=')
+                {
+                    if (!prevdash && sb.Length > 0)
+                    {
+                        sb.Append('-');
+                        prevdash = true;
+                    }
+                }
+                else if ((int)c >= 128)
+                {
+                    int prevlen = sb.Length;
+                    sb.Append(RemapInternationalCharToAscii(c));
+                    if (prevlen != sb.Length) prevdash = false;
+                }
+                if (i == maxlen) break;
+            }
+
+            if (prevdash)
+                return sb.ToString().Substring(0, sb.Length - 1);
+            else
+                return sb.ToString();
+        }
+
+        /// <summary>
+        /// Source:
+        /// http://meta.stackoverflow.com/a/7696
+        /// (Creative Commons Attribution Share Alike)
+        /// </summary>
+        public static string RemapInternationalCharToAscii(char c)
+        {
+            string s = c.ToString().ToLowerInvariant();
+            if ("àåáâäãåą".Contains(s))
+            {
+                return "a";
+            }
+            else if ("èéêëę".Contains(s))
+            {
+                return "e";
+            }
+            else if ("ìíîïı".Contains(s))
+            {
+                return "i";
+            }
+            else if ("òóôõöøőð".Contains(s))
+            {
+                return "o";
+            }
+            else if ("ùúûüŭů".Contains(s))
+            {
+                return "u";
+            }
+            else if ("çćčĉ".Contains(s))
+            {
+                return "c";
+            }
+            else if ("żźž".Contains(s))
+            {
+                return "z";
+            }
+            else if ("śşšŝ".Contains(s))
+            {
+                return "s";
+            }
+            else if ("ñń".Contains(s))
+            {
+                return "n";
+            }
+            else if ("ýÿ".Contains(s))
+            {
+                return "y";
+            }
+            else if ("ğĝ".Contains(s))
+            {
+                return "g";
+            }
+            else if (c == 'ř')
+            {
+                return "r";
+            }
+            else if (c == 'ł')
+            {
+                return "l";
+            }
+            else if (c == 'đ')
+            {
+                return "d";
+            }
+            else if (c == 'ß')
+            {
+                return "ss";
+            }
+            else if (c == 'Þ')
+            {
+                return "th";
+            }
+            else if (c == 'ĥ')
+            {
+                return "h";
+            }
+            else if (c == 'ĵ')
+            {
+                return "j";
+            }
+            else
+            {
+                return "";
+            }
+        }
+    }
+}

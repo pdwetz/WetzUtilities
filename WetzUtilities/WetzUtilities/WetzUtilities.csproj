@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Peter Wetzel</Authors>
+    <Company>Peter Wetzel</Company>
+    <Description>Common utility methods for .NET projects</Description>
+    <Copyright>(c) 2019 Peter Wetzel</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/pdwetz/WetzUtilities/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/pdwetz/WetzUtilities</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>

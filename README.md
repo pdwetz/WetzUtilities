@@ -1,4 +1,6 @@
 # WetzUtilities
+[![NuGet Version](https://img.shields.io/nuget/v/WetzUtilities.svg)](https://www.nuget.org/packages/WetzUtilities/)
+
 Common utility and extension methods for .NET projects to improve quality-of-life for the developer.
 
 ## Quick Usage Example

@@ -11,6 +11,7 @@
     <PackageTags>csharp, utilities, strings, datetime, file, guid</PackageTags>
     <RepositoryUrl>https://github.com/pdwetz/WetzUtilities</RepositoryUrl>
     <Version>1.0.1</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>

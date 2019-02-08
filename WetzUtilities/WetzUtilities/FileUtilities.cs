@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WetzUtilities
@@ -22,6 +20,9 @@ namespace WetzUtilities
             }
         }
 
+        /// <summary>
+        /// Load text file from given path.
+        /// </summary>
         public static string LoadTextFile(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
@@ -43,6 +44,9 @@ namespace WetzUtilities
             return text;
         }
 
+        /// <summary>
+        /// Load text file from given path.
+        /// </summary>
         public static async Task<string> LoadTextFileAsync(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
@@ -64,6 +68,9 @@ namespace WetzUtilities
             return text;
         }
 
+        /// <summary>
+        /// Write text file to given path. Will attempt to create directory if it doesn't exist.
+        /// </summary>
         public static void WriteTextFile(string dirPath, string fileName, string text)
         {
             if (string.IsNullOrWhiteSpace(dirPath))
@@ -89,6 +96,9 @@ namespace WetzUtilities
             }
         }
 
+        /// <summary>
+        /// Write text file to given path. Will attempt to create directory if it doesn't exist.
+        /// </summary>
         public static async Task WriteTextFileAsync(string dirPath, string fileName, string text)
         {
             if (string.IsNullOrWhiteSpace(dirPath))
@@ -125,7 +135,7 @@ namespace WetzUtilities
         {
             var name = Path.GetFileNameWithoutExtension(fileName);
             var extension = Path.GetExtension(fileName);
-            var filePath = Path.Combine(dirPath, name);
+            var filePath = Path.Combine(dirPath, name + extension);
             while (File.Exists(filePath))
             {
                 int index = name.LastIndexOf('-');

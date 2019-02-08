@@ -16,4 +16,16 @@
     <ProjectReference Include="..\WetzUtilities\WetzUtilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="assets\alfa.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="assets\bravo-1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="assets\bravo.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

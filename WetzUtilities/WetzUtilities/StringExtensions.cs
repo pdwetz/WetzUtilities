@@ -21,11 +21,17 @@ namespace WetzUtilities
 {
     public static class StringExtensions
     {
+        /// <summary>
+        /// Check if given string is IsNullOrWhiteSpace
+        /// </summary>
         public static bool IsEmpty(this string val)
         {
             return string.IsNullOrWhiteSpace(val);
         }
 
+        /// <summary>
+        /// Check if given string is not IsNullOrWhiteSpace
+        /// </summary>
         public static bool IsNotEmpty(this string val)
         {
             return !string.IsNullOrWhiteSpace(val);
@@ -49,6 +55,9 @@ namespace WetzUtilities
             return excepted == 0 && intercected == source.Length;
         }
 
+        /// <summary>
+        /// Allows chaining equality method regardless of whether source is null or not
+        /// </summary>
         public static bool SafeEquals(this string source, string other, StringComparison comp = StringComparison.OrdinalIgnoreCase)
         {
             if (source == null)
@@ -58,11 +67,17 @@ namespace WetzUtilities
             return source.Equals(other, comp);
         }
 
+        /// <summary>
+        /// Allows chaining hash method regardless of whether source is null or not
+        /// </summary>
         public static int SafeHashCode(this string source)
         {
             return source == null ? 0 : source.GetHashCode();
         }
 
+        /// <summary>
+        /// Shortens any string over a set amount, appending a string if it does so
+        /// </summary>
         public static string Shave(this string source, int maxLength, string concat = "...")
         {
             if (string.IsNullOrEmpty(source) || source.Length <= maxLength)

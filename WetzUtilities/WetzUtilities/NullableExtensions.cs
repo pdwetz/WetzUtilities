@@ -21,6 +21,9 @@ namespace WetzUtilities
     /// </summary>
     public static class NullableExtensions
     {
+        /// <summary>
+        /// Allows chaining equality method regardless of whether source is null or not
+        /// </summary>
         public static bool SafeEquals<T>(this T? source, T? other) where T : struct
         {
             if (source.HasValue)
@@ -30,6 +33,9 @@ namespace WetzUtilities
             return !other.HasValue;
         }
 
+        /// <summary>
+        /// Allows chaining hash method regardless of whether source is null or not
+        /// </summary>
         public static int SafeHashCode<T>(this T? source) where T : struct
         {
             return source.HasValue ? source.GetHashCode() : 0;

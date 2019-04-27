@@ -87,6 +87,14 @@ namespace WetzUtilities
         }
 
         /// <summary>
+        /// Return a formatted datetime for specific timezone
+        /// </summary>
+        public static string SafeDateTimeZone(this DateTimeOffset datetime, string timeZoneId, string format = "yyyy-MM-dd h:mm tt")
+        {
+            return TimeZoneInfo.ConvertTime(datetime, TimeZoneInfo.FindSystemTimeZoneById(timeZoneId)).ToString(format);
+        }
+
+        /// <summary>
         /// Check if given date is MinValue
         /// </summary>
         public static bool IsEmpty(this DateTimeOffset date)

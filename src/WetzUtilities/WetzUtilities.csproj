@@ -10,7 +10,7 @@
     <PackageProjectUrl>https://github.com/pdwetz/WetzUtilities</PackageProjectUrl>
     <PackageTags>csharp, utilities, strings, datetime, file, guid</PackageTags>
     <RepositoryUrl>https://github.com/pdwetz/WetzUtilities</RepositoryUrl>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

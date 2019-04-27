@@ -25,5 +25,12 @@ namespace WetzUtilities.Test
             var dt = new DateTimeOffset(2000, 12, 15, 17, 30, 0, 0, new TimeSpan(-5, 0, 0));
             Assert.Equal("15 Dec 2000 04:30 PM CST", dt.SafeDateTimeZone("Central Standard Time", "dd MMM yyyy hh:mm tt \"CST\""));
         }
+
+        [Fact]
+        public void SafeDateTimeZone_null()
+        {
+            DateTimeOffset? dt = null;
+            Assert.Null(dt.SafeDateTimeZone("Eastern Standard Time"));
+        }
     }
 }

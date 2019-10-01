@@ -52,7 +52,7 @@ namespace WetzUtilities
             }
             int excepted = source.Except(target).Count();
             int intersected = source.Intersect(target).Count();
-            return excepted == 0 && intercected == source.Length;
+            return excepted == 0 && intersected == source.Length;
         }
 
         /// <summary>

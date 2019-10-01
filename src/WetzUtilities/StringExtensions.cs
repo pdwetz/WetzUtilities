@@ -51,8 +51,8 @@ namespace WetzUtilities
                 return true;
             }
             int excepted = source.Except(target).Count();
-            int intercected = source.Intersect(target).Count();
-            return excepted == 0 && intercected == source.Length;
+            int intersected = source.Intersect(target).Count();
+            return excepted == 0 && intersected == source.Length;
         }
 
         /// <summary>

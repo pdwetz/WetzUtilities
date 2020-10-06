@@ -5,13 +5,14 @@
     <Authors>Peter Wetzel</Authors>
     <Company>Peter Wetzel</Company>
     <Description>Common utility methods for .NET projects</Description>
-    <Copyright>(c) 2019 Peter Wetzel</Copyright>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/pdwetz/WetzUtilities/master/LICENSE</PackageLicenseUrl>
+    <Copyright>(c) 2020 Peter Wetzel</Copyright>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/pdwetz/WetzUtilities</PackageProjectUrl>
     <PackageTags>csharp, utilities, strings, datetime, file, guid</PackageTags>
     <RepositoryUrl>https://github.com/pdwetz/WetzUtilities</RepositoryUrl>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>

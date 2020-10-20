@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*
+Copyright 2020 Peter Wetzel
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -25,9 +40,9 @@ namespace WetzUtilities
         /// </summary>
         public static string LoadTextFile(string filePath)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
+            if (filePath.IsEmpty())
             {
-                throw new ArgumentException("File path missing");
+                throw new ArgumentException("File path required", nameof(filePath));
             }
 
             if (!File.Exists(filePath))
@@ -49,9 +64,9 @@ namespace WetzUtilities
         /// </summary>
         public static async Task<string> LoadTextFileAsync(string filePath)
         {
-            if (string.IsNullOrWhiteSpace(filePath))
+            if (filePath.IsEmpty())
             {
-                throw new ArgumentException("File path missing");
+                throw new ArgumentException("File path required", nameof(filePath));
             }
 
             if (!File.Exists(filePath))
@@ -73,14 +88,14 @@ namespace WetzUtilities
         /// </summary>
         public static void WriteTextFile(string dirPath, string fileName, string text)
         {
-            if (string.IsNullOrWhiteSpace(dirPath))
+            if (dirPath.IsEmpty())
             {
-                throw new ArgumentException("Directory missing");
+                throw new ArgumentException("Directory path required", nameof(dirPath));
             }
 
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (fileName.IsEmpty())
             {
-                throw new ArgumentException("File name missing");
+                throw new ArgumentException("File name required", nameof(fileName));
             }
 
             if (!Directory.Exists(dirPath))
@@ -101,14 +116,14 @@ namespace WetzUtilities
         /// </summary>
         public static async Task WriteTextFileAsync(string dirPath, string fileName, string text)
         {
-            if (string.IsNullOrWhiteSpace(dirPath))
+            if (dirPath.IsEmpty())
             {
-                throw new ArgumentException("Directory missing");
+                throw new ArgumentException("Directory path required", nameof(dirPath));
             }
 
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (fileName.IsEmpty())
             {
-                throw new ArgumentException("File name missing");
+                throw new ArgumentException("File name required", nameof(fileName));
             }
 
             if (!Directory.Exists(dirPath))
@@ -130,31 +145,42 @@ namespace WetzUtilities
         /// </summary>
         /// <param name="dirPath">Target directory path (e.g. f:\temp)</param>
         /// <param name="fileName">File name, including extension (e.g. sample.txt)</param>
+        /// <param name="separator">Character used prior to appending number.</param>
         /// <returns></returns>
-        public static string GetNextName(string dirPath, string fileName)
+        public static string GetNextName(string dirPath, string fileName, char separator = '-')
         {
+            if (dirPath.IsEmpty())
+            {
+                throw new ArgumentException("Directory path required", nameof(dirPath));
+            }
+
+            if (fileName.IsEmpty())
+            {
+                throw new ArgumentException("File name required", nameof(fileName));
+            }
+
             var name = Path.GetFileNameWithoutExtension(fileName);
             var extension = Path.GetExtension(fileName);
-            var filePath = Path.Combine(dirPath, name + extension);
+            var filePath = Path.Combine(dirPath, string.Concat(name, extension));
             while (File.Exists(filePath))
             {
-                int index = name.LastIndexOf('-');
+                int index = name.LastIndexOf(separator);
                 if (index < 0)
                 {
-                    name += "-1";
+                    name += $"{separator}1";
                 }
                 else
                 {
                     string val = name.Substring(index + 1);
                     if (!Int32.TryParse(val, out var i))
                     {
-                        name += "-1";
+                        name += $"{separator}1";
                     }
                     else
                     {
                         i++;
                         name = name.Substring(0, index);
-                        name += $"-{i}";
+                        name += $"{separator}{i}";
                     }
                 }
                 filePath = Path.Combine(dirPath, name + extension);

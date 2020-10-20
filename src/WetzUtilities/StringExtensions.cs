@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2019 Peter Wetzel
+Copyright 2020 Peter Wetzel
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -136,6 +136,22 @@ namespace WetzUtilities
         }
 
         /// <summary>
+        /// Helper method for parsing a time with a given date and time zone.
+        /// If time or date are empty, result will be null.
+        /// </summary>
+        public static DateTimeOffset? ParseTime(this string time, DateTime date, string timeZoneId)
+        {
+            if (time.IsEmpty() || date.IsEmpty())
+            {
+                return null;
+            }
+            var dt = DateTime.Parse($"{date.SafeShortDate()} {time}");
+            var tz = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            var offset = tz.GetUtcOffset(dt);
+            return new DateTimeOffset(dt, offset);
+        }
+
+        /// <summary>
         /// Parses given string into a TimeSpan.
         /// Empty strings result in new TimeSpan.
         /// </summary>
@@ -154,7 +170,6 @@ namespace WetzUtilities
                     return TimeSpan.ParseExact(source, @"m\:ss", null);
                 default:
                     return TimeSpan.ParseExact(source, @"ss", null);
-
             }
         }
 

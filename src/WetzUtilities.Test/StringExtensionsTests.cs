@@ -67,6 +67,14 @@ namespace WetzUtilities.Test
         }
 
         [Fact]
+        public void ParseTimeTest()
+        {
+            // Note this accounts for daylight savings time; when not active, it's -5 hours.
+            DateTimeOffset? target = new DateTimeOffset(2010,6,30,10, 45,0, new TimeSpan(-4, 0, 0));
+            Assert.Equal(target, "10:45 AM".ParseTime(new DateTime(2010, 6, 30), "Eastern Standard Time"));
+        }
+
+        [Fact]
         public void URLFriendlyTest()
         {
             Assert.Equal("test-phrase", "Test Phrase".URLFriendly()); 

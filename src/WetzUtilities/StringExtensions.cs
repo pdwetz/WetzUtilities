@@ -136,6 +136,22 @@ namespace WetzUtilities
         }
 
         /// <summary>
+        /// Helper method for parsing a time with a given date and time zone.
+        /// If time or date are empty, result will be null.
+        /// </summary>
+        public static DateTimeOffset? ParseTime(this string time, DateTime date, string timeZoneId)
+        {
+            if (time.IsEmpty() || date.IsEmpty())
+            {
+                return null;
+            }
+            var dt = DateTime.Parse($"{date.SafeShortDate()} {time}");
+            var tz = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            var offset = tz.GetUtcOffset(dt);
+            return new DateTimeOffset(dt, offset);
+        }
+
+        /// <summary>
         /// Parses given string into a TimeSpan.
         /// Empty strings result in new TimeSpan.
         /// </summary>

@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2020 Peter Wetzel
+Copyright 2021 Peter Wetzel
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ namespace WetzUtilities
         /// </summary>
         public static int SafeHashCode(this string source)
         {
-            return source == null ? 0 : source.GetHashCode();
+            return source?.GetHashCode() ?? 0;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace WetzUtilities
             {
                 return phrase;
             }
-            return string.Format("{0}, {1}", phrase.Substring(i + prefix.Length).Trim(), phrase.Substring(0, i + prefix.Length).Trim());
+            return $"{phrase.Substring(prefix.Length).Trim()}, {phrase.Substring(0, prefix.Length).Trim()}";
         }
 
         /// <summary>
@@ -162,15 +162,12 @@ namespace WetzUtilities
                 return new TimeSpan();
             }
             var split = source.Split(new char[] { ':' });
-            switch (split.Length)
+            return split.Length switch
             {
-                case 3:
-                    return TimeSpan.ParseExact(source, @"h\:mm\:ss", null);
-                case 2:
-                    return TimeSpan.ParseExact(source, @"m\:ss", null);
-                default:
-                    return TimeSpan.ParseExact(source, @"ss", null);
-            }
+                3 => TimeSpan.ParseExact(source, @"h\:mm\:ss", null),
+                2 => TimeSpan.ParseExact(source, @"m\:ss", null),
+                _ => TimeSpan.ParseExact(source, @"ss", null)
+            };
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2020 Peter Wetzel
+Copyright 2021 Peter Wetzel
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ namespace WetzUtilities
         /// <summary>
         /// Creates directory if it doesn't already exist
         /// </summary>
-        static public void SetupDirectory(string dirPath)
+        public static void SetupDirectory(string dirPath)
         {
             if (!Directory.Exists(dirPath))
             {
@@ -49,13 +49,10 @@ namespace WetzUtilities
             {
                 return null;
             }
-
-            string text = null;
-            using (StreamReader sr = File.OpenText(filePath))
-            {
-                text = sr.ReadToEnd();
-                sr.DiscardBufferedData();
-            }
+            
+            using StreamReader sr = File.OpenText(filePath);
+            string text = sr.ReadToEnd();
+            sr.DiscardBufferedData();
             return text;
         }
 
@@ -73,13 +70,10 @@ namespace WetzUtilities
             {
                 return null;
             }
-
-            string text = null;
-            using (StreamReader sr = File.OpenText(filePath))
-            {
-                text = await sr.ReadToEndAsync();
-                sr.DiscardBufferedData();
-            }
+            
+            using StreamReader sr = File.OpenText(filePath);
+            string text = await sr.ReadToEndAsync();
+            sr.DiscardBufferedData();
             return text;
         }
 
@@ -104,11 +98,9 @@ namespace WetzUtilities
             }
 
             string filePath = Path.Combine(dirPath, fileName);
-            using (StreamWriter sw = File.CreateText(filePath))
-            {
-                sw.Write(text);
-                sw.Flush();
-            }
+            using StreamWriter sw = File.CreateText(filePath);
+            sw.Write(text);
+            sw.Flush();
         }
 
         /// <summary>
@@ -132,11 +124,9 @@ namespace WetzUtilities
             }
 
             string filePath = Path.Combine(dirPath, fileName);
-            using (StreamWriter sw = File.CreateText(filePath))
-            {
-                await sw.WriteAsync(text);
-                await sw.FlushAsync();
-            }
+            using StreamWriter sw = File.CreateText(filePath);
+            await sw.WriteAsync(text);
+            await sw.FlushAsync();
         }
 
         /// <summary>
@@ -172,7 +162,7 @@ namespace WetzUtilities
                 else
                 {
                     string val = name.Substring(index + 1);
-                    if (!Int32.TryParse(val, out var i))
+                    if (!int.TryParse(val, out var i))
                     {
                         name += $"{separator}1";
                     }

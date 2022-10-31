@@ -38,6 +38,14 @@ namespace WetzUtilities
         }
 
         /// <summary>
+        /// Any empty string returns null, any non-empty string is trimmed.
+        /// </summary>
+        public static string Clean(this string val)
+        {
+            return string.IsNullOrWhiteSpace(val) ? null : val.Trim();
+        }
+
+        /// <summary>
         /// Check if source is a substring or not. Actual order of characters is ignored (e.g. "abc" would be valid substring of "decba")
         /// </summary>
         public static bool IsUnorderedSubstring(this string source, string target)

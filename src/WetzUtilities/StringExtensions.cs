@@ -40,7 +40,7 @@ namespace WetzUtilities
         /// <summary>
         /// Any empty string returns null, any non-empty string is trimmed.
         /// </summary>
-        public static string Cleanup(this string val)
+        public static string Clean(this string val)
         {
             return string.IsNullOrWhiteSpace(val) ? null : val.Trim();
         }

@@ -13,10 +13,10 @@ namespace WetzUtilities.Test
         }
         
         [Fact]
-        public void CleanupTest()
+        public void CleanTest()
         {
-            Assert.Null("".Cleanup());
-            Assert.Equal("foo", "foo ".Cleanup());
+            Assert.Null("".Clean());
+            Assert.Equal("foo", "foo ".Clean());
         }
 
         [Fact]

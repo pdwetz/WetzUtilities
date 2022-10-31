@@ -11,6 +11,13 @@ namespace WetzUtilities.Test
             Assert.True("".IsEmpty());
             Assert.False("foo".IsEmpty());
         }
+        
+        [Fact]
+        public void CleanupTest()
+        {
+            Assert.Null("".Cleanup());
+            Assert.Equal("foo", "foo ".Cleanup());
+        }
 
         [Fact]
         public void ContainsTest()
